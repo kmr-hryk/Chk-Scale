@@ -1,16 +1,32 @@
-#åˆæœŸå€¤ã®ã‚»ãƒƒãƒˆ
-#ç¸®å°ºã®æ–‡å­—åˆ—ãŒè¨˜éŒ²ã•ã‚Œã¦ã„ã‚‹ä½ç½®ã®åº§æ¨™ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+#‰Šú’l‚ÌƒZƒbƒg
+#CAD‚Ìc‰¡‚ÌkÚ‚ª“¯‚¶ê‡‚É‚Ì‚İŒvZ‚ª‚Å‚«‚Ü‚·B
+
+#kÚ‚Ì•¶š—ñ‚ª‹L˜^‚³‚ê‚Ä‚¢‚éˆÊ’u‚ÌÀ•W‚ğƒZƒbƒg‚·‚é
 $strlocate = "'341.750000','230.750000'"
-#å–å¾—ã—ãŸã„CADåº§æ¨™ç³»ã®åç§°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
-$strLayer = "æ¸¬é‡å›³"
+#æ“¾‚µ‚½‚¢CADÀ•WŒn‚Ì–¼Ì‚ğƒZƒbƒg‚·‚é
+$strLayer = "‘ª—Ê}"
 
-#å‡¦ç†ã®é–‹å§‹
 
-#SXFãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ç¸®å°ºã®æ–‡å­—åˆ—ãŒè¨˜éŒ²ã•ã‚ŒãŸè¡Œã‚’å–ã‚Šå‡ºã™
-$strSyuku = Get-Content $ARGS[0] | Select-String "text_string_feature" | Select-String $strlocate
+#ˆ—‚ÌŠJn
+$filename = $ARGS[0]
 
-#ç¸®å°ºã®æ–‡å­—åˆ—ã ã‘ã‚’å–ã‚Šå‡ºã™
+#SXFƒtƒ@ƒCƒ‹‚©‚çkÚ‚Ì•¶š—ñ‚ª‹L˜^‚³‚ê‚½s‚ğæ‚èo‚·
+$strSyuku = Get-Content $filename | Select-String "text_string_feature" | Select-String $strlocate
+
+#kÚ‚Ì•¶š—ñ‚¾‚¯‚ğæ‚èo‚·
 $strSyuku = $strSyuku -Split ","
 $strSyuku = $strSyuku[3].Replace("\'","")
 
-#
+#SXFƒtƒ@ƒCƒ‹‚©‚çCADÀ•WŒn‚ÌkÚ‚ª‹L˜^‚³‚ê‚½s‚ğæ‚èo‚·
+$mathSyuku = Get-Content $filename | Select-String "sfig_locate_feature" | Select-String $strLayer
+
+#kÚ‚ğŒvZ‚·‚é
+$mathSyuku = $mathSyuku -Split ","
+$mathSyuku = $mathSyuku[5].Replace("'","")
+$mathSyuku = [int][math]::Pow([double]$mathSyuku,-1)
+
+if ($strSyuku -eq $mathSyuku) {
+   Write-Output "³‚µ‚¢kÚ‚ª‹L˜^‚³‚ê‚Ä‚¢‚Ü‚·`nFilename:$filename`nScale:1/$mathSyuku"
+}else{
+   Write-Output "kÚ‚ªˆÙ‚È‚Á‚Ä‚¢‚Ü‚·`nFilename:$filename`nPaper:1/$strSyuku`nCal:1/$mathSyuku"
+}

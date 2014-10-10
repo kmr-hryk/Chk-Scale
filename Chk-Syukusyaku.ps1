@@ -18,15 +18,19 @@ $strSyuku = $strSyuku -Split ","
 $strSyuku = $strSyuku[3].Replace("\'","")
 
 #SXFƒtƒ@ƒCƒ‹‚©‚çCADÀ•WŒn‚ÌkÚ‚ª‹L˜^‚³‚ê‚½s‚ğæ‚èo‚·
-$mathSyuku = Get-Content $filename | Select-String "sfig_locate_feature" | Select-String $strLayer
+$calSyuku = Get-Content $filename | Select-String "sfig_locate_feature" | Select-String $strLayer
 
 #kÚ‚ğŒvZ‚·‚é
-$mathSyuku = $mathSyuku -Split ","
-$mathSyuku = $mathSyuku[5].Replace("'","")
-$mathSyuku = [int][math]::Pow([double]$mathSyuku,-1)
+$calSyuku = $calSyuku -Split ","
+$calSyuku = $calSyuku[5].Replace("'","")
+$calSyuku = [int][math]::Pow([double]$calSyuku,-1)
 
-if ($strSyuku -eq $mathSyuku) {
-   Write-Output "³‚µ‚¢kÚ‚ª‹L˜^‚³‚ê‚Ä‚¢‚Ü‚·`nFilename:$filename`nScale:1/$mathSyuku"
+#kÚ‚ğ”äŠr‚·‚é
+if ($strSyuku -eq $calSyuku) {
+   Write-Output "Match.`nFilename:$filename`nScale:1/$calSyuku"
 }else{
-   Write-Output "kÚ‚ªˆÙ‚È‚Á‚Ä‚¢‚Ü‚·`nFilename:$filename`nPaper:1/$strSyuku`nCal:1/$mathSyuku"
+   $tmpColor = (Get-Host).UI.RawUI.ForegroundColor
+   (Get-Host).UI.RawUI.ForegroundColor = "Red"
+   Write-Output "Unmath.`nFilename:$filename`nPaper:1/$strSyuku`nCal:1/$calSyuku"
+   (Get-Host).UI.RawUI.ForegroundColor = $tmpColor
 }

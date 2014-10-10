@@ -1,15 +1,15 @@
-#�����l�̃Z�b�g
-#�k�ڂ̕����񂪋L�^����Ă���ʒu�̍��W���Z�b�g����
+#初期値のセット
+#縮尺の文字列が記録されている位置の座標をセットする
 $strlocate = "'341.750000','230.750000'"
-#�擾������CAD���W�n�̖��̂��Z�b�g����
-$strLayer = "���ʐ}"
+#取得したいCAD座標系の名称をセットする
+$strLayer = "測量図"
 
-#�����̊J�n
+#処理の開始
 
-#SXF�t�@�C������k�ڂ̕����񂪋L�^���ꂽ�s�����o��
+#SXFファイルから縮尺の文字列が記録された行を取り出す
 $strSyuku = Get-Content $ARGS[0] | Select-String "text_string_feature" | Select-String $strlocate
 
-#�k�ڂ̕����񂾂������o��
+#縮尺の文字列だけを取り出す
 $strSyuku = $strSyuku -Split ","
 $strSyuku = $strSyuku[3].Replace("\'","")
 
